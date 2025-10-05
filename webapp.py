@@ -20,12 +20,11 @@ st.write("The To-Do app helps users organize their daily tasks by allowing them 
 
 # Render all todos
 for index, todo in enumerate(todos):
-    checkbox = st.checkbox(todo,key=todo)
-    if checkbox:
+    if st.checkbox(todo.strip(), key=todo):
         todos.pop(index)
         fun.write_todos(todos)
-        del st.session_state[todo]
-        st.experimental_rerun()
+        if todo in st.session_state:
+            del st.session_state[todo]
         
 st.text_input(label="", placeholder="Add new todo",
               on_change=add_todo, key='new_todo')
