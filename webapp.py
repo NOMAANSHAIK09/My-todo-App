@@ -1,32 +1,44 @@
 import streamlit as st
 import functions as fun
 
-todos = fun.get_todos()
+st.title("My Todo App")
+st.subheader("A personalized To-Do Manager")
+st.write("Each user manages their own tasks independently ✅")
 
-def add_todo():
-    todo = st.session_state["new_todo"] + "\n"
-    todos = fun.get_todos()
-    todos.append(todo)
-    fun.write_todos(todos)
-    st.session_state["new_todo"] = ""
+# Step 1: Ask for username
+username = st.text_input("👤 Enter your username:", placeholder="e.g. nomaan")
 
+# Only continue when username is entered
+if username:
+    todos = fun.get_todos(username)
 
+    def add_todo():
+        todo = st.session_state["new_todo"].strip()
+        if todo:
+            todos_local = fun.get_todos(username)
+            todos_local.append(todo + "\n")
+            fun.write_todos(todos_local, username)
+            st.session_state["new_todo"] = ""
+            st.experimental_rerun()
 
-st.title("My To-Do App")
-st.subheader("This a todo app.")
-st.write("The To-Do app helps users organize their daily tasks by allowing them to create, edit, and manage task lists. "
-         "It acts as a digital planner where users can keep track of what needs to be done, set priorities, and mark "
-         "tasks as completed — improving productivity and reducing the chance of forgetting important activities.")
+    # Display current todos
+    st.write("### 📝 Your Tasks")
+    for index, todo in enumerate(todos):
+        checkbox = st.checkbox(todo.strip(), key=f"{username}_{index}")
+        if checkbox:
+            todos.pop(index)
+            fun.write_todos(todos, username)
+            del st.session_state[f"{username}_{index}"]
+            st.experimental_rerun()
 
-# Render all todos
-for index, todo in enumerate(todos):
-    if st.checkbox(todo.strip(), key=todo):
-        todos.pop(index)
-        fun.write_todos(todos)
-        if todo in st.session_state:
-            del st.session_state[todo]
-            st.rerun()
+    # Add new todo
+    st.text_input(
+        label="Add New Task",
+        placeholder="Type your task and press Enter",
+        on_change=add_todo,
+        key="new_todo"
+    )
 
-        
-st.text_input(label="", placeholder="Add new todo",
-              on_change=add_todo, key='new_todo')
+else:
+    st.info("Please enter your username above to view your personal To-Do list.")
+
