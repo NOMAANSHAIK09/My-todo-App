@@ -1,27 +1,27 @@
 import os
 
-FILEPATH = "todos.txt"
+BASE_DIR = os.path.dirname(__file__)  # ensures paths are relative to project folder
 
-def get_todos(username=None, filepath=FILEPATH):
-    """Get todos for a specific user. Create file if it doesn’t exist."""
-    if username:
-        filepath = f"todos_{username}.txt"
-    
-    # ✅ Ensure the file exists before reading
+def get_todos(username=None):
+    """Get todos for a specific user. Creates file if it doesn’t exist."""
+    filename = "todos.txt" if not username else f"todos_{username}.txt"
+    filepath = os.path.join(BASE_DIR, filename)
+
+    # Create file if it doesn't exist
     if not os.path.exists(filepath):
         with open(filepath, 'w') as file:
-            pass  # just create an empty file
-    
-    # ✅ Now safely read
+            pass  # empty file
+
+    # Read todos
     with open(filepath, 'r') as file:
         todos = file.readlines()
     return todos
 
 
-def write_todos(todos, username=None, filepath=FILEPATH):
+def write_todos(todos, username=None):
     """Write todos for a specific user."""
-    if username:
-        filepath = f"todos_{username}.txt"
+    filename = "todos.txt" if not username else f"todos_{username}.txt"
+    filepath = os.path.join(BASE_DIR, filename)
+
     with open(filepath, 'w') as file:
         file.writelines(todos)
-
