@@ -25,11 +25,10 @@ if username:
             todos.pop(index)
             fun.write_todos(todos, username)
             del st.session_state[f"{username}_{index}"]
-            st.experimental_rerun()
+            st.rerun()
 
     # Optional: manual refresh button
-    if st.button("Refresh 🔄"):
-        st.experimental_rerun()
+   
 
 
 
