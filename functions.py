@@ -1,4 +1,4 @@
-FFILEPATH = "todos.txt"
+FILEPATH = "todos.txt"
 
 def get_todos(username=None, filepath=FILEPATH):
     """Return todos for a specific user, or the default file."""
