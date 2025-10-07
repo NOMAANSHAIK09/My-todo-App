@@ -1,27 +1,27 @@
+import os
+
 FILEPATH = "todos.txt"
 
 def get_todos(username=None, filepath=FILEPATH):
-    """Return todos for a specific user, or the default file."""
+    """Get todos for a specific user. Create file if it doesn’t exist."""
     if username:
-        filepath = f"todos_{username}.txt"  # unique file per user
-    try:
-        with open(filepath, 'r') as file:
-            todos = file.readlines()
-    except FileNotFoundError:
-        # create empty file if it doesn't exist
+        filepath = f"todos_{username}.txt"
+    
+    # ✅ Ensure the file exists before reading
+    if not os.path.exists(filepath):
         with open(filepath, 'w') as file:
-            pass
-        todos = []
+            pass  # just create an empty file
+    
+    # ✅ Now safely read
+    with open(filepath, 'r') as file:
+        todos = file.readlines()
     return todos
 
 
 def write_todos(todos, username=None, filepath=FILEPATH):
-    """Write todos for a specific user, or default file."""
+    """Write todos for a specific user."""
     if username:
         filepath = f"todos_{username}.txt"
     with open(filepath, 'w') as file:
         file.writelines(todos)
 
-
-if __name__ == "__main__":
-    print(get_todos("nomaan"))
