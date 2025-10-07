@@ -42,3 +42,7 @@ if username:
 else:
     st.info("Please enter your username above to view your personal To-Do list.")
 
+
+if st.button("Reload Page 🔄"):
+    st.rerun()  # re-runs the script and refreshes the page
+
