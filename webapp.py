@@ -15,7 +15,7 @@ if username:
             todos_local.append(new_task + "\n")
             fun.write_todos(todos_local, username)
             st.session_state["new_todo"] = ""
-            st.experimental_rerun()
+            st.rerun()
 
     st.text_input("Add New Task", on_change=add_todo, key="new_todo")
 
