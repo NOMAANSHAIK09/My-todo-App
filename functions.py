@@ -1,27 +1,31 @@
 import os
 
-BASE_DIR = os.path.dirname(__file__)  # ensures paths are relative to project folder
+# Base path relative to current working directory
+BASE_DIR = os.getcwd()  # safer than __file__ on Streamlit Cloud
+FILEPATH = os.path.join(BASE_DIR, "todos.txt")
 
 def get_todos(username=None):
-    """Get todos for a specific user. Creates file if it doesn’t exist."""
-    filename = "todos.txt" if not username else f"todos_{username}.txt"
-    filepath = os.path.join(BASE_DIR, filename)
-
-    # Create file if it doesn't exist
-    if not os.path.exists(filepath):
-        with open(filepath, 'w') as file:
-            pass  # empty file
-
+    """Get todos for a specific user. Create file if it doesn’t exist."""
+    path = FILEPATH
+    if username:
+        path = os.path.join(BASE_DIR, f"todos_{username}.txt")
+    
+    # Create the file if it doesn't exist
+    if not os.path.exists(path):
+        with open(path, 'w') as file:
+            pass
+    
     # Read todos
-    with open(filepath, 'r') as file:
+    with open(path, 'r') as file:
         todos = file.readlines()
     return todos
 
-
 def write_todos(todos, username=None):
     """Write todos for a specific user."""
-    filename = "todos.txt" if not username else f"todos_{username}.txt"
-    filepath = os.path.join(BASE_DIR, filename)
-
-    with open(filepath, 'w') as file:
+    path = FILEPATH
+    if username:
+        path = os.path.join(BASE_DIR, f"todos_{username}.txt")
+    
+    with open(path, 'w') as file:
         file.writelines(todos)
+
